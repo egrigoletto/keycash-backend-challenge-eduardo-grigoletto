@@ -1,0 +1,311 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API para desafio da kaycash para manipulação de imóveis",
+        "description": "Essa API tem como objetivo recuperar, inserir, remover ou alterar informações pertinentes a produtos do ramo imobiliário",
+        "contact": {
+            "email": "eduardo.grigoletto@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "API de testes"
+        }
+    ],
+    "paths": {
+        "/property": {
+            "post": {
+                "description": "Essa rota inserirá na base um novo produto",
+                "summary": "Inclui um produto se os dados forem válidos",
+                "tags": ["Property"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Property"
+                            },
+                            "examples": {
+                                "property": {
+                                    "value": {
+                                        "type": "casa",
+                                        "description": "Casa dois quartos, 80 metros próx. Hospital",
+                                        "address": "Rua Soldado Francisco Gomes de Souza",
+                                        "addressNumber": "152",
+                                        "addressNeighborhood": "Parque Novo Mundo",
+                                        "cep": "02189030",
+                                        "rooms": 2,
+                                        "garageVacancys": 0,
+                                        "propertyMeterage": 80,
+                                        "venueValue": 850,
+                                        "rentValue": 200000
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Property"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "description": "Busca uma lista de produtos",
+                "summary": "Busca uma lista de produtos, pode receber ou não uma lista de parâmetros",
+                "tags": ["Property"],
+                "parameters": [
+                    {
+                        "name": "garageVacancys",
+                        "in": "query",
+                        "description": "Quantidade de vagas de garagem em numero",
+                        "required": false
+                    },
+                    {
+                        "name": "propertyMeterage",
+                        "in": "query",
+                        "description": "Metragem em metros quadrados em numero do imóvel",
+                        "required": false
+                    },
+                    {
+                        "name": "rooms",
+                        "in": "query",
+                        "description": "Quantidade de quartos em numero",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/property/{id}": {
+            "get": {
+                "description": "Busca um produto",
+                "summary": "Busca um produto com base em seu id",
+                "tags": ["Property"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Chave única de registro de um imóvel na base",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Property"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Altera um produto",
+                "summary": "Altera um produto com base em seu id",
+                "tags": ["Property"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Chave única de registro de um imóvel na base",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Property"
+                            },
+                            "examples": {
+                                "property": {
+                                    "value": {
+                                        "description": "Casa dois quartos, 120 metros próx. Hospital",
+                                        "address": "Rua Soldado Francisco Gomez de Souza",
+                                        "rentValue": 250000
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Property"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um produto",
+                "summary": "Remove um produto com base em seu id",
+                "tags": ["Property"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Chave única de registro de um imóvel na base",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Property": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "addressNumber": {
+                        "type": "string"
+                    },
+                    "addressNeighborhood": {
+                        "type": "string"
+                    },
+                    "cep": {
+                        "type": "string"
+                    },
+                    "rooms": {
+                        "type": "number"
+                    },
+                    "garageVacancys": {
+                        "type": "number"
+                    },
+                    "propertyMeterage": {
+                        "type": "number"
+                    },
+                    "venueValue": {
+                        "type": "number"
+                    },
+                    "rentValue": {
+                        "type": "number"
+                    },
+                    "id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "NotFoundError": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ValidationError": {
+                "type": "object",
+                "properties": {
+                    "validationError": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

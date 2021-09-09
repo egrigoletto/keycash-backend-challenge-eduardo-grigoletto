@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "host": "database",
+  "port": 3306,
+  "username": "root",
+  "password": "admin",
+  "database": "challengedatabase",
+  "entities": ["dist/entity/**/*.js"],
+  "synchronize": true
+}
