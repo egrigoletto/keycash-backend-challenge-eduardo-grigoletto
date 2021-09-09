@@ -18,9 +18,6 @@ const createFilter = (garageVacancys: any, propertyMeterage: any , rooms: any ) 
 }
 
 export const getPropertyList = async (req: Request, res: Response): Promise<Response> => {
-  console.log('-------------------------------------------------------------------------')
-  console.log(await getRepository(Property))
-  console.log('-------------------------------------------------------------------------')
   const { error } = propertyFiltersValidators(req.query)
   if (error) {
     return res.status(409).json({
